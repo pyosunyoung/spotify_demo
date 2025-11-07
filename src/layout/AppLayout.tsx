@@ -6,6 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import LibraryHead from './components/LibraryHead';
 import EmptyPlaylist from './components/EmptyPlaylist';
 import Library from './components/Library';
+import Navbar from './components/Navbar';
 
 
 const Layout = styled("div")({
@@ -76,7 +77,10 @@ const AppLayout = () => {
                     <Library />
                 </ContentBox>
                 </Sidebar>
+                <ContentBox>
+                    <Navbar/>
             <Outlet />
+            </ContentBox>
         </Layout>
     )
 }
