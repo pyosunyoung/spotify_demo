@@ -1,3 +1,6 @@
+import { Artist } from "./artists";
+import { ExternalUrls, Image } from "./commonType";
+
 export interface getNewReleasesResponse {
     albums:{
         href:string;
@@ -6,20 +9,18 @@ export interface getNewReleasesResponse {
         offset:number;
         previous:string | null;
         total:number;
-        items:{
+        items: SimplifiedAlbum[];
+    };
+}
+
+export interface SimplifiedAlbum{
             album_type: string;
             total_tracks: string;
             available_markets: string[];
-            external_urls: {
-                spotify: string;
-            };
+            external_urls: ExternalUrls;
             href: string;
             id: string;
-            images: {
-                url: string;
-                height: number | null;
-                width: number | null;
-            }[];
+            images: Image[];
             name: string;
             release_date: string;
             release_date_precision: string;
@@ -28,16 +29,5 @@ export interface getNewReleasesResponse {
             },
             type: string;
             url: string;
-            artists: {
-                external_urls?:{
-                    spotify: string;
-                };
-                href?: string;
-                id?: string;
-                name?: string;
-                type?: string;
-                uri?: string;
-            }[];
-        }[];
-    };
+            artists: Artist[];
 }
