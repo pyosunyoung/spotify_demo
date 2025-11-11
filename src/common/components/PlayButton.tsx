@@ -19,6 +19,7 @@ const PlayButtonContainer = styled("button")(({ theme }) => ({
 }));
 
 const PlayButton: React.FC = () => {
+  
   return (
     <PlayButtonContainer>
       <svg

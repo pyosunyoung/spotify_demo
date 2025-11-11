@@ -38,7 +38,7 @@ export const exchangeToken = async(code:string, codeVerifier:string): Promise<Ex
         throw new Error("Missing required parameters");
     }
     try{
-        const url = "https://accounts.spotify.com/api/token"
+        const url = "https://accounts.spotify.com/api/token";
         const body = new URLSearchParams({
         client_id: CLIENT_ID,
         grant_type: 'authorization_code',
@@ -51,6 +51,7 @@ export const exchangeToken = async(code:string, codeVerifier:string): Promise<Ex
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
         })
+        
         return response.data;
     }catch(error){
         throw new Error('fail to fetch token')
