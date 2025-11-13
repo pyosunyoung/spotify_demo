@@ -22,9 +22,10 @@ const PlaylistContainer = styled("div")(({ theme }) => ({
 }));
 const Library = () => {
   const { ref, inView } = useInView();
+  //ref 감시할 DOM 요소에 연결하는 참조, inView : 해당 요소가 화면에 보이는지 여부(boolean)
   const {
     data,
-    fetchNextPage, // 다음 페이지 데이터터
+    fetchNextPage, // 다음 페이지 데이터
     hasNextPage, // 다음 페이지가 있나요?
     isFetchingNextPage, // 페이지를 가져오고 있나요?
     isLoading,
@@ -64,7 +65,7 @@ const Library = () => {
 
         </PlaylistContainer>
       )}
-    </div> //ref에 도착해야 데이터가 가져와짐짐
+    </div> //ref에 도착해야 데이터가 가져와짐
   );
 };
 

@@ -19,6 +19,7 @@ const Playlist = ({playlists}) => {
     setSelectedId(id);
     navigate(`/playlist/${id}`);
   };
+  console.log("playlist item데이터", playlists);
   return (
     <div>
       {playlists.map((item) => (
