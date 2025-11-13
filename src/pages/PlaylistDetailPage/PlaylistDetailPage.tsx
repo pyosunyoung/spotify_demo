@@ -27,6 +27,7 @@ import DesktopPlaylistItem from "./components/DesktopPlaylistItem";
 import { PAGE_LIMIT } from "../../configs/commonConfig";
 import { useInView } from "react-intersection-observer";
 import LoginButton from "../../common/components/LoginButton";
+import EmptyPlaylistWithSearch from "./components/EmptyPlaylistWithSearch";
 
 const PlaylistHeader = styled(Grid)({
   display: "flex",
@@ -178,7 +179,7 @@ const PlaylistDetailPage = () => {
           </Box>
         </Grid>
       </PlaylistHeader>
-      {playlist?.tracks?.total === 0 ? <Typography>써치</Typography> : <Table>
+      {playlist?.tracks?.total === 0 ? <EmptyPlaylistWithSearch/> : <Table>
         <TableHead>
           <TableRow>
             <TableCell>#</TableCell>
