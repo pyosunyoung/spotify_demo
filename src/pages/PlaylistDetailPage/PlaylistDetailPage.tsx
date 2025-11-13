@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import DefaultImage from "../../common/components/DefaultImage";
+import LoadingSpinner from "../../common/components/LoadingSpinner";
 
 const PlaylistHeader = styled(Grid)({
   display: "flex",
@@ -62,7 +63,7 @@ const PlaylistDetailPage = () => {
   if (isLoading || !playlist)
     return (
       <LoaderContainer>
-        <CircularProgress color="success" />
+        <LoadingSpinner/>
       </LoaderContainer>
     );
 
