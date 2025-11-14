@@ -79,3 +79,13 @@ export interface CreatePlaylistRequest {
     collaboratvie?: boolean;
     description?: string;
 }
+
+export interface AddItemsToPlaylistRequest{
+    playlistId: string | undefined; // 필수 (경로 파라미터)
+    uris: string[];     // 필수 (트랙 또는 에피소드 URI 목록)
+    position?: number;  // 선택 (지정하지 않으면 맨 뒤에 추가)    
+}
+
+export interface AddItemsToPlaylistResponse {
+    snapshot_id: string;
+  }

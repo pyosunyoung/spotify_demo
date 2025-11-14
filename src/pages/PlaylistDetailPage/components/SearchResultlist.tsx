@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import LoadingSpinner from "../../../common/components/LoadingSpinner";
+import { useAddItemsToPlaylist } from "../../../hooks/useAddItemsToPlaylist";
+import { useParams } from "react-router";
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     background: theme.palette.background.paper,
     color: theme.palette.common.white,
@@ -43,12 +45,21 @@ const SearchResultList = ({
     fetchNextPage,
 }: SearchResultListProps) => {
     const [ref, inView] = useInView(); // 무한스크롤 옵저버 추가 
-
+    const {mutate: addItems} = useAddItemsToPlaylist();
+    const { id: playlistId } = useParams<{ id: string}>();
     useEffect(() => { // fetchNextPage 호출 추가 
         if (inView && hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
         }
     }, [inView, hasNextPage, isFetchingNextPage]);
+
+    const handleAddToItems = (trackId: string | undefined) => {
+        addItems({
+            playlistId,
+            uris: [`spotify:track:${trackId}`],
+            position: 0,
+        });
+    };
 
     return (
         <StyledTableContainer>
@@ -73,7 +84,7 @@ const SearchResultList = ({
                         </TableCell>
                         <TableCell>{track.album?.name}</TableCell>
                         <TableCell>
-                            <Button>Add</Button>
+                            <Button onClick={() => handleAddToItems(track.id)}>Add</Button>
                         </TableCell>
                     </StyledTableRow>
                 ))}
