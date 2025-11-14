@@ -86,6 +86,7 @@ export interface Episode {
     show: SimplifiedShow;
   }
   
+  export type SimplifiedEpisode = Omit<Episode, "show">; //show만 뻄뻄
 
   export interface ResumePoint {
     fully_played: boolean;
@@ -116,4 +117,50 @@ export interface Episode {
   export interface Copyright {
     text: string;
     type: "C" | "P" | string; // C = 저작권, P = 음원 저작권
+  }
+
+
+  export interface CopyrightObject {
+    text: string;
+    type: "C" | "P";
+  }
+  
+  export interface AuthorObject {
+    name: string;
+  }
+  
+  export interface NarratorObject {
+    name: string;
+  }
+  
+  export interface SimplifiedAudioBook {
+    authors: AuthorObject[];
+    available_markets: string[];
+    copyrights: CopyrightObject[];
+  
+    description: string;
+    html_description: string;
+  
+    edition?: string | null;
+  
+    explicit: boolean;
+  
+    external_urls: ExternalUrls; 
+    href: string;
+    id: string;
+  
+    images: Image[]; 
+  
+    languages: string[];
+    media_type: string;
+  
+    name: string;
+  
+    narrators: NarratorObject[];
+    publisher: string;
+  
+    type: "audiobook";
+    uri: string;
+  
+    total_chapters: number;
   }
