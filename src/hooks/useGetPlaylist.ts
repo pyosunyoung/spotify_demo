@@ -8,7 +8,7 @@ const useGetPlaylist = (params:getPlaylistRequest) => {
         queryFn:()=>{
             return getPlaylist(params);
         },
-        enabled: !!params.playlist_id, //params.playlist_id가 있다면 호출출
+        enabled: !!params.playlist_id, //params.playlist_id가 있다면 호출
     })
 }
 

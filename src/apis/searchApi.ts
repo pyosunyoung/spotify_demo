@@ -1,6 +1,7 @@
 import axios from "axios"
 import { SPOTIFY_BASE_URL } from "../configs/commonConfig"
 import { SearchRequestParmas, SearchResponse } from "../models/search";
+import api from "../utils/api";
 
 export const searchItemsByKeyword = async (token: string, params: SearchRequestParmas):Promise<SearchResponse> => {
     try {
@@ -30,3 +31,4 @@ export default searchItemsByKeyword;
 //그래서 로그인 안해도 search가 가능함. 그래서 사용.
 //로그인 안한상태, 로그인 한상태 둘다 SEARCH가 가능해야해서 API말고 AXIOS를 사용해야함.
 //대신 토큰을 받아옴옴
+

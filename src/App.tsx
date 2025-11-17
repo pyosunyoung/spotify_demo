@@ -40,7 +40,7 @@ function App() {
           <Route path='search/:keyword' element={<SearchWithPage />} />
           <Route path='playlist/:id' element={<PlaylistDetailPage />} />
           <Route path='/playlist' element={<PlaylistPage />} />
-
+    
         </Route>
         {/* <Route path='/admin' element= */}
       </Routes>

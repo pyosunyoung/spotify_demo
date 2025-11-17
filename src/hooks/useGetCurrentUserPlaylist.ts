@@ -7,7 +7,7 @@ const useGetCurrentUserPlaylists = ({limit, offset}: getCurrentUserPlaylistsRequ
         return useInfiniteQuery({ // 무한 스크롤 로직
             queryKey:["current-user-playlists"],
             queryFn:({pageParam = 0})=>{
-                return getCurrentUserPlaylists({limit,offset:pageParam});
+                return getCurrentUserPlaylists({limit, offset:pageParam});
             },
             initialPageParam:0,
             getNextPageParam:(lastPage)=>{
