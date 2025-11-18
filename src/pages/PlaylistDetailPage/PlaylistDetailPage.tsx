@@ -66,7 +66,7 @@ const LoaderContainer = styled(Box)(() => ({
   justifyContent: "center",
 }));
 
-// 🧩 스크롤 가능한 트랙 리스트 컨테이너
+// 스크롤 가능한 트랙 리스트 컨테이너
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   background: theme.palette.background.paper,
   color: theme.palette.common.white,

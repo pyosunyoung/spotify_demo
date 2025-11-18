@@ -24,8 +24,12 @@ export interface CategoryObject {
     name: string;
 }
 
-export type CategoryResponse = ApiResponse<CategoryObject>;
+// export type CategoryResponse = ApiResponse<CategoryObject>;
 
+export interface CategoryResponse{
+    categories :  ApiResponse<CategoryObject>
+    
+}
 
 export interface CategoryDetailRequestParams {
     category_id : string;
