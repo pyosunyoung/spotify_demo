@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import useGetSeveralBrowseCategories from "../../hooks/useGetSeveralBrowseCategories";
 import { Grid, Typography, styled, TextField, InputAdornment, Box } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -56,19 +56,6 @@ const CategoryCard = styled(Box)(({ theme }) => ({
     },
 }));
 
-const CategoryCenterText = styled("div")(() => ({
-    position: "absolute",
-    top: "45%",        // 약간 위쪽 (Spotify 느낌)
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    color: "white",
-    fontSize: "40px",
-    fontWeight: 900,
-    pointerEvents: "none", // 클릭 막지 않음
-    opacity: 0.9,
-    whiteSpace: "nowrap",
-}));
-
 const CategoryImage = styled("img")(() => ({
     position: "absolute",
     bottom: "-20px",
@@ -83,14 +70,22 @@ const CategoryImage = styled("img")(() => ({
 const SearchPage = () => {
     const { data } = useGetSeveralBrowseCategories({ limit: 25, offset: 0 });
     const categories = data?.pages?.[0]?.categories?.items || [];
-    console.log("category data", data);
-    
 
     const [keyword, setKeyword] = useState<string>("");
-    const { data:searchData, error, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useSearchItemsByKeyword({
+    const { data: searchData, error, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useSearchItemsByKeyword({
         q: keyword,
         type: [SEARCH_TYPE.Track, SEARCH_TYPE.Artist, SEARCH_TYPE.Album] // enum 가져와서 활용, 복수 가능
     });
+    // 색상은 렌더 시 고정되도록 useMemo 적용
+    const coloredCategories = useMemo(
+        () =>
+            categories.map((cat) => ({
+                ...cat,
+                bgColor: COLORS[Math.floor(Math.random() * COLORS.length)],
+            })),
+        [categories]
+    );
+
     console.log("searchData", data);
     const tracks = searchData?.pages[0]?.tracks?.items ?? []; //널 병합 연산자라고 불립니다. 이 연산자는 왼쪽의 값이 null 또는 undefined일 때 오른쪽의 값을 반환하고, 그렇지 않으면 왼쪽의 값을 반환합니다.
     const albums = searchData?.pages[0]?.albums?.items ?? [];
@@ -129,11 +124,26 @@ const SearchPage = () => {
             <div>
                 {isLoading ? (
                     <LoadingSpinner /> // 로딩 중일 때 스피너 표시
+                ) : keyword === "" ? (
+                    <Grid container spacing={3}>
+                        {coloredCategories.map((cat) => (
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={cat.id}>
+                                <CategoryCard bgcolor={cat.bgColor}>
+                                    <Typography variant="h6" sx={{ fontWeight: 700, color: "white" }}>
+                                        {cat.name}
+                                    </Typography>
+                                    {cat.icons?.[0]?.url && (
+                                        <CategoryImage src={cat.icons[0].url} alt={cat.name} />
+                                    )}
+                                </CategoryCard>
+                            </Grid>
+                        ))}
+                    </Grid>
                 ) : hasTracksResults || hasAlbumsResults || hasArtistsResults ? (
                     <SearchResultPage// nextpage관련 속성 추가 
                         tracklist={tracks}
-                        albumlist = {albums}
-                        artistlist ={artists}
+                        albumlist={albums}
+                        artistlist={artists}
                         hasNextPage={hasNextPage}
                         isFetchingNextPage={isFetchingNextPage}
                         fetchNextPage={fetchNextPage}
@@ -144,24 +154,6 @@ const SearchPage = () => {
                     <div>{`No Result for "${keyword}"`}</div> // 검색 결과가 없을 때만 표시
                 )}
             </div>
-            <Grid container spacing={3}>
-                {categories.map((cat: CategoryObject) => {
-                    const bgColor = COLORS[Math.floor(Math.random() * COLORS.length)];
-                    const img = cat.icons?.[0]?.url;
-
-                    return (
-                        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={cat.id}>
-                            <CategoryCard bgcolor={bgColor}>
-                                <Typography variant="h6" sx={{ fontWeight: 700, color: "white" }}>
-                                    {cat.name}
-                                </Typography>
-                                {/* <CategoryCenterText>{cat.name}</CategoryCenterText> */}
-                                {img && <CategoryImage src={img} alt={cat.name} />}
-                            </CategoryCard>
-                        </Grid>
-                    );
-                })}
-            </Grid>
 
         </SearchContainer>
     );

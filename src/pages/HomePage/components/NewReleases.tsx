@@ -13,6 +13,7 @@ const NewReleases = () => {
   if (error) {
     return <ErrorMessage errorMessage={error.message} />
   }
+  
   return (
     <div>
       <Typography variant='h1' fontWeight={700}>New Releases Albums</Typography>

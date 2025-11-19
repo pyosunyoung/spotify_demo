@@ -1,12 +1,23 @@
-import React, { useEffect } from "react";
-import { Grid, Typography, styled, Box, IconButton } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Grid, Typography, styled, Box, IconButton, Snackbar, Alert } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import PersonIcon from "@mui/icons-material/Person";
 import { useInView } from "react-intersection-observer";
 
 
 // ========================= Styled Components =========================
+const SearchContainer = styled(Box)({ // 스크롤 디자인 
+  padding: "16px",
+  width: "100%",
+  maxHeight: "40vh",
+  overflowY: "auto",
 
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
+  msOverflowStyle: "none", // IE and Edge
+  scrollbarWidth: "none", // Firefox
+});
 
 const SectionTitle = styled(Typography)(({ theme }) => ({
   color: "white",
@@ -124,15 +135,19 @@ const SearchResultPage = ({ tracklist, albumlist, artistlist, hasNextPage, isFet
 
   const { data: playlistData } = useGetCurrentUserPlaylists({ limit: 20, offset: 0 });
   const addToPlaylist = useAddItemsToPlaylist();
-
-  const handleOpenModal = (songId) => {
+  const [toastMessage, setToastMessage] = useState("");
+  const [openToast, setOpenToast] = useState(false);
+  const handleOpenModal = (songId: string) => {
     setSelectedSongId(songId);
     setOpen(true);
+
   };
 
-  const handleSelectPlaylist = (playlistId) => {
+  const handleSelectPlaylist = (playlistId: string) => {
     addToPlaylist.mutate({ playlistId, uris: [`spotify:track:${selectedSongId}`] });
     setOpen(false);
+    setOpenToast(true);
+    setToastMessage("플레이리스트에 곡이 추가되었습니다!");
   };
 
   return (
@@ -140,7 +155,7 @@ const SearchResultPage = ({ tracklist, albumlist, artistlist, hasNextPage, isFet
       {/* ======================== TOP RESULT + SONGS GRID ======================== */}
 
       <Grid container spacing={4}>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <SectionTitle variant="h5">Top result</SectionTitle>
 
           {topTrack && (
@@ -165,27 +180,31 @@ const SearchResultPage = ({ tracklist, albumlist, artistlist, hasNextPage, isFet
         </Grid>
 
         {/* ======================== SONGS ======================== */}
-        <Grid item xs={12} md={6}>
+
+        <Grid size={{ xs: 12, md: 6 }}>
+
           <SectionTitle variant="h5">Songs</SectionTitle>
+          <SearchContainer>
+            {tracklist?.map((song) => (
+              <SongRow key={song.id}>
+                <Box>
+                  <Typography variant="body1">{song.name}</Typography>
+                  <Typography variant="body2" color="gray">
+                    {song.artists?.[0]?.name}
+                  </Typography>
+                </Box>
 
-          {tracklist?.slice(0, 5).map((song) => (
-            <SongRow key={song.id}>
-              <Box>
-                <Typography variant="body1">{song.name}</Typography>
-                <Typography variant="body2" color="gray">
-                  {song.artists?.[0]?.name}
+                <AddButton className="addButton" onClick={() => handleOpenModal(song.id)}>
+                  <AddIcon />
+                </AddButton>
+
+                <Typography variant="body2" color="gray" sx={{ width: "40px", textAlign: "right" }}>
+                  {Math.floor(song.duration_ms / 60000)}:{((song.duration_ms % 60000) / 1000).toFixed(0).padStart(2, "0")}
                 </Typography>
-              </Box>
+              </SongRow>
+            ))}
 
-              <AddButton className="addButton" onClick={() => handleOpenModal(song.id)}>
-                <AddIcon />
-              </AddButton>
-
-              <Typography variant="body2" color="gray" sx={{ width: "40px", textAlign: "right" }}>
-                {Math.floor(song.duration_ms / 60000)}:{((song.duration_ms % 60000) / 1000).toFixed(0).padStart(2, "0")}
-              </Typography>
-            </SongRow>
-          ))}
+          </SearchContainer>
         </Grid>
       </Grid>
 
@@ -195,7 +214,7 @@ const SearchResultPage = ({ tracklist, albumlist, artistlist, hasNextPage, isFet
         <SectionTitle variant="h5">Artists</SectionTitle>
         <Grid container spacing={3}>
           {artistlist?.map((artist) => (
-            <Grid item xs={6} sm={4} md={2.4} key={artist.id}>
+            <Grid size={{ xs: 6, sm: 4, md: 2.4 }} key={artist.id}>
               <CardContainer>
                 <Box sx={{ position: "relative" }}>
                   {artist.images?.[0]?.url ? (
@@ -225,7 +244,7 @@ const SearchResultPage = ({ tracklist, albumlist, artistlist, hasNextPage, isFet
         <SectionTitle variant="h5">Albums</SectionTitle>
         <Grid container spacing={3}>
           {albumlist?.map((album) => (
-            <Grid item xs={6} sm={4} md={2.4} key={album.id}>
+            <Grid size={{ xs: 6, sm: 4, md: 2.4 }} key={album.id}>
               <CardContainer>
                 <Box sx={{ position: "relative" }}>
                   <AlbumImage src={album.images?.[0]?.url} />
@@ -271,9 +290,15 @@ const SearchResultPage = ({ tracklist, albumlist, artistlist, hasNextPage, isFet
         </DialogActions>
       </Dialog>
 
-  
+
       <div ref={ref} style={{ height: "40px" }} />
       {isFetchingNextPage && <LoadingSpinner />}
+
+      <Snackbar open={openToast} autoHideDuration={1500} onClose={() => setOpenToast(false)}>
+        <Alert severity="success" sx={{ width: '100%' }}>
+          {toastMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
