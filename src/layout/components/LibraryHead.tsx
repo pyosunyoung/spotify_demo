@@ -12,7 +12,6 @@ const Head = styled("div")({
   display: "flex",
   alignItems: "center",
   padding: "8px",
-
   justifyContent: "space-between",
 });
 const LibraryHead = () => {
