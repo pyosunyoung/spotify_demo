@@ -13,7 +13,7 @@ import MobileBottomNav from './components/MobileBottomNav';
 const Layout = styled("div")({
     display: "flex",
     height: "100vh",
-    padding: "8px",
+    padding: "16px",
     
 })
 

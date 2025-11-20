@@ -7,6 +7,7 @@ import { Box } from '@mui/material';
 
 const SearchContainer = styled(Box)({ // 스크롤 디자인 
   padding: "16px", 
+  paddingBottom: "43px",
   width: "100%",
   height: "100%",
   overflowY: "auto",
